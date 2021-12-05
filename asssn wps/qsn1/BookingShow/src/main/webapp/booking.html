@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript">
+var x = document.getElementById("demo");
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+    lat=position.coords.latitude;
+    lon=position.coords.longitude;
+    displayLocation(lat,lon);
+}
+function displayLocation(latitude,longitude){
+    var geocoder;
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(latitude, longitude);
+
+    geocoder.geocode(
+        {'latLng': latlng}, 
+        function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    var add= results[0].formatted_address ;
+                    var  value=add.split(",");
+
+                    count=value.length;
+                    country=value[count-1];
+                    state=value[count-2];
+                    city=value[count-3];
+                     var hiddencity=document.getElementById("city1");
+                     hiddencity.value=city;
+                     x.innerHTML="city";
+  }
+                else  {
+                    x.innerHTML = "address not found";
+                }
+            }
+            else {
+                x.innerHTML =  status;
+            }
+        }
+    );
+}
+
+
+
+</script>
+
+
+</head>
+<body bgcolor="pink">
+<form method="post" action="Sbooking" >
+Enter Details
+<table><tr>
+<td> City</td>
+<td> <input type="text" name="city" id="city"></td></tr>
+<tr>
+<td>Movie Name</td><td> <input type="text" name="Movie" id="Movie"></td></tr>
+<tr>
+<td>Date</td><td><input type="date" name="date" value="date"></td>
+</tr>
+<tr>
+<td> <input type="hidden" name="city1" id="city1"/></td></tr>
+
+</table>
+
+  
+ 
+<button type="submit" name="submit" onsubmit="getLocation()">Submit
+</button>
+</form>
+
+</body>
+</html>
